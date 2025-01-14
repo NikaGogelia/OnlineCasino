@@ -6,7 +6,7 @@ using OnlineCasino.Repository.IRepository;
 
 namespace OnlineCasino.Controllers
 {
-	[Authorize(Roles = "Player")]
+	[Authorize(Roles = "Admin, Player")]
 	public class WalletController : Controller
 	{
 		private readonly UserManager<ApplicationUser> _user;
@@ -25,12 +25,6 @@ namespace OnlineCasino.Controllers
 			if (user == null)
 			{
 				return Unauthorized();
-			}
-
-			var isPlayer = await _user.IsInRoleAsync(user, "Player");
-			if (!isPlayer)
-			{
-				return Forbid("Access denied. Only players can access wallet balance.");
 			}
 
 			var wallet = await _walletRepository.GetWalletBalance(user.Id);

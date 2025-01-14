@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using OnlineCasino.Areas.Identity.Data;
-using OnlineCasino.Data;
 using OnlineCasino.Repository;
 using OnlineCasino.Repository.IRepository;
 using OnlineCasino.Services;
@@ -18,6 +17,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<IDepositWithdrawRepository, DepositWithdrawRepository>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

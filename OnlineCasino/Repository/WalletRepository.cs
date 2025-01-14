@@ -1,10 +1,8 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using OnlineCasino.Models;
 using OnlineCasino.Repository.IRepository;
 using System.Data;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.Data.Common;
-using OnlineCasino.Models;
 
 namespace OnlineCasino.Repository;
 

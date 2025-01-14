@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OnlineCasino.Areas.Identity.Data;
+using OnlineCasino.Repository.IRepository;
 
-namespace OnlineCasino.Data;
+namespace OnlineCasino.Areas.Identity.Data;
 
 public static class DbInitializer
 {
@@ -9,6 +9,7 @@ public static class DbInitializer
 	{
 		var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 		var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+		var walletRepository = serviceProvider.GetRequiredService<IWalletRepository>();
 
 		string[] roles = { "Admin", "Player" };
 		foreach (var role in roles)
@@ -28,7 +29,17 @@ public static class DbInitializer
 			if (result.Succeeded)
 			{
 				await userManager.AddToRoleAsync(adminUser, "Admin");
+
+				await CreateAdminWallet(walletRepository, adminUser.Id);
 			}
 		}
 	}
+
+	private static async Task CreateAdminWallet(IWalletRepository walletRepository, string userId)
+	{
+		int defaultCurrencyId = 1;
+
+		walletRepository.CreateWallet(userId, defaultCurrencyId);
+	}
 }
+
