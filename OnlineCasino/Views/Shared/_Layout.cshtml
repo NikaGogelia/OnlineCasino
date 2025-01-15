@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/OnlineCasino.styles.css" asp-append-version="true" />
+	<link href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css" rel="stylesheet" />
 </head>
 <body>
 	<header>
@@ -22,12 +23,21 @@
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="DepositWithdraw" asp-action="Deposit">Deposit</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="DepositWithdraw" asp-action="Withdraw">Withdraw</a>
-						</li>
+						@if (User.IsInRole("Admin") || User.IsInRole("Player"))
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="DepositWithdraw" asp-action="Deposit">Deposit</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="DepositWithdraw" asp-action="Withdraw">Withdraw</a>
+							</li>
+						}
+						@if (User.IsInRole("Admin"))
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a>
+							</li>
+						}
 					</ul>
 				</div>
 				<partial name="_LoginPartial" />
@@ -48,8 +58,8 @@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
-	<script src="~/js/DepositWithdrawRequest.js" asp-append-version="true"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

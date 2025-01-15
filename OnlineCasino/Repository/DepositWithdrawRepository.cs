@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using NuGet.Protocol;
+using OnlineCasino.Models;
 using OnlineCasino.Repository.IRepository;
 using System.Data;
 
@@ -28,5 +30,26 @@ public class DepositWithdrawRepository : IDepositWithdrawRepository
 		{
 			return $"An error occurred: {ex.Message}";
 		}
+	}
+
+	public async Task<IEnumerable<RegisteredTransactionRequest>> GetRegisteredTransactionRequests()
+	{
+		string sql =
+			"SELECT dpw.Id, u.UserName, dpw.TransactionType, dpw.Amount, dpw.Status FROM dbo.DepositWithdrawRequests AS dpw " +
+			"INNER JOIN dbo.AspNetUsers AS u " +
+			"ON dpw.UserId = u.Id";
+
+		var result = await db.QueryAsync<RegisteredTransactionRequest>(sql);
+
+		return result;
+	}
+
+	public async Task<string> RejectWithdrawRequest(int transactionRequestId)
+	{
+		string sql = "UPDATE dbo.DepositWithdrawRequests SET Status = 'rejected' WHERE Id = @Id AND TransactionType = 'withdraw'";
+
+		var updateWithdrawStatus = await db.ExecuteAsync(sql, new { @Id = transactionRequestId });
+
+		return "Withdraw Request Was Rejected!";
 	}
 }

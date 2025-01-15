@@ -18,7 +18,7 @@ namespace OnlineCasino.Controllers
 			_walletRepository = walletRepository;
 		}
 
-		[HttpGet("balance")]
+		[HttpGet("Balance")]
 		public async Task<IActionResult> GetWalletBallanceAsync()
 		{
 			var user = await _user.GetUserAsync(User);

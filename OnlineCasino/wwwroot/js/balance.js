@@ -6,7 +6,7 @@
 
 function fetchBalance() {
     $.ajax({
-        url: '/balance',
+        url: '/Balance',
         method: 'GET',
         dataType: 'json',
         success: function (data) {
