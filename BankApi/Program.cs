@@ -4,6 +4,16 @@ using BankApi.Service.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowSpecificOrigins", policy =>
+	{
+		policy.WithOrigins("http://localhost:5117")
+			  .AllowAnyHeader()
+			  .AllowAnyMethod();
+	});
+});
+
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddScoped<IDepositService, DepositService>();
 
@@ -21,6 +31,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthorization();
 

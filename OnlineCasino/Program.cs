@@ -1,9 +1,12 @@
+using BankApi;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using OnlineCasino.Areas.Identity.Data;
 using OnlineCasino.Repository;
 using OnlineCasino.Repository.IRepository;
+using OnlineCasino.Service;
+using OnlineCasino.Service.IService;
 using OnlineCasino.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +18,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
 				.AddEntityFrameworkStores<IdentityDbContext>()
 				.AddDefaultTokenProviders();
 
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IDepositWithdrawRepository, DepositWithdrawRepository>();
+builder.Services.AddScoped<IBankingService, BankingService>();
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

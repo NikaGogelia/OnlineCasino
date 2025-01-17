@@ -11,19 +11,17 @@
 });
 
 $(document).ready(function () {
-    $('#transactionForm').submit(function (e) {
+    $('#transactionFormDeposit').submit(function (e) {
         e.preventDefault();
 
         var amount = $('#amount').val();
-        var transactionType = $(this).data('transaction-type');
 
         var requestData = {
-            TransactionType: transactionType,
             Amount: parseFloat(amount)
         };
 
         $.ajax({
-            url: '/RegisterTransaction',
+            url: '/RegisterDeposit',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(requestData),
@@ -32,7 +30,7 @@ $(document).ready(function () {
                     icon: "success",
                     title: "Trasnaction Was Successful!"
                 });
-                setTimeout(() => window.location.href = '/Home/Index', 3000);
+                console.log(response);
             },
             error: function (error) {
                 Toast.fire({

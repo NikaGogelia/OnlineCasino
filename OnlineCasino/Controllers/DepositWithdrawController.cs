@@ -1,22 +1,31 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BankApi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using OnlineCasino.Areas.Identity.Data;
 using OnlineCasino.Models;
+using OnlineCasino.Models.Banking;
 using OnlineCasino.Repository.IRepository;
+using OnlineCasino.Service;
+using OnlineCasino.Service.IService;
 
 namespace OnlineCasino.Controllers;
 
 [Authorize(Roles = "Admin, Player")]
 public class DepositWithdrawController : Controller
 {
-	private IDepositWithdrawRepository _depositWithdrawRepository;
 	private readonly UserManager<ApplicationUser> _userManager;
+	private readonly IDepositWithdrawRepository _depositWithdrawRepository;
+	private readonly IBankingService _bankingService;
+	private readonly AppSettings _appSettings;
 
-	public DepositWithdrawController(IDepositWithdrawRepository depositWithdrawRepository, UserManager<ApplicationUser> userManager)
+	public DepositWithdrawController(IDepositWithdrawRepository depositWithdrawRepository, UserManager<ApplicationUser> userManager, IBankingService bankingService, IOptions<AppSettings> appSettings)
 	{
-		_depositWithdrawRepository = depositWithdrawRepository;
 		_userManager = userManager;
+		_depositWithdrawRepository = depositWithdrawRepository;
+		_bankingService = bankingService;
+		_appSettings = appSettings.Value;
 	}
 
 	public IActionResult Deposit()
@@ -29,35 +38,41 @@ public class DepositWithdrawController : Controller
 		return View();
 	}
 
-	[HttpPost("RegisterTransaction")]
-	public async Task<IActionResult> RegisterTransactionAsync([FromBody] TransactionRequest request)
+	[HttpPost("RegisterDeposit")]
+	public async Task<IActionResult> RegisterDeposit([FromBody] TransactionRequest request)
 	{
-		var user = await _userManager.GetUserAsync(User);
+		var userId = _userManager.GetUserId(User);
 
-		if (user == null)
+		if (userId == null)
 		{
-			return Unauthorized("User is not authenticated.");
+			return Json(new { status = 0, message = "user not found" });
 		}
 
-		if (request.TransactionType != "deposit" && request.TransactionType != "withdraw")
+		var result = await _depositWithdrawRepository.RegisterDeposit(userId, request.Amount);
+
+		if (result.Status != 1)
 		{
-			return BadRequest("Transaction Type Should Be: 'deposit' or 'withdraw'!");
+			return Json(new { status = result.Status, message = "Something went wrong" });
 		}
 
-		if (request.Amount <= 0)
+		var apiRequest = new BankingDepositRequest
 		{
-			return BadRequest("Transaction Amount Should Be Greater Than 0!");
-		}
+			Amount = request.Amount,
+			TransactionId = result.TransactionId,
+			MerchantId = _appSettings.MerchantId,
+			Hash = HashDepositService.GenerateHash(request.Amount, _appSettings.MerchantId, result.TransactionId, _appSettings.SecretKey)
+		};
 
-		try
-		{
-			var transaction = await _depositWithdrawRepository.TransactionRequest(user.Id, request.Amount, request.TransactionType);
+		var bankingApiResponse = await _bankingService.SendDepositRequestAsync(apiRequest);
 
-			return Ok(transaction);
-		}
-		catch (Exception ex)
-		{
-			return StatusCode(500, $"Internal server error: {ex.Message}");
-		}
+		return Json(new { status = result.Status, message = "Success", url = bankingApiResponse.PaymentUrl });
+	}
+
+	[HttpPut("RejectWithdrawRequest")]
+	public async Task<IActionResult> RejectWithdrawRequest([FromBody] int id)
+	{
+		var reject = await _depositWithdrawRepository.RejectWithdrawRequest(id);
+
+		return Ok(reject);
 	}
 }

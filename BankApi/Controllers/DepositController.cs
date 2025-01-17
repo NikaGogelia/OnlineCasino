@@ -21,11 +21,6 @@ namespace BankApi.Controllers
 		{
 			var result = await _depositService.ProcessDepositRequest(request);
 
-			if (result.Status == Status.Rejected)
-			{
-				return BadRequest(result);
-			}
-
 			return Ok(result);
 		}
 	}

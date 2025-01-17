@@ -20,19 +20,19 @@ public class DepositService : IDepositService
 	{
 		if (!ValidateHash(request))
 		{
-			return new DepositResponse { Status = Status.Rejected, Message = "Invalid Hash!" };
+			return new DepositResponse { Status = Status.Rejected.ToString(), Message = "Invalid Hash!" };
 		}
 
 		bool isAmountEven = request.Amount % 2 == 0;
 
 		if (!isAmountEven)
 		{
-			return new DepositResponse { Status = Status.Rejected, Message = "Amount Should Be Even!" };
+			return new DepositResponse { Status = Status.Rejected.ToString(), Message = "Amount Should Be Even!" };
 		}
 
 		string paymentUrl = "/payment/finalize?" + request.TransactionId;
 
-		return new DepositResponse { Status = Status.Success, PaymentUrl = paymentUrl };
+		return new DepositResponse { Status = Status.Success.ToString(), PaymentUrl = paymentUrl };
 	}
 
 	private bool ValidateHash(DepositRequest request)

@@ -20,7 +20,7 @@ $(document).ready(function () {
                 });
             }
         });
-        // make request on bank api
+        // make request on bank api for withdraw
     });
 
     $('#DashboardTable').on('click', '#rejectRequest', function () {
@@ -77,15 +77,7 @@ $(document).ready(function () {
             {
                 data: 'transactionType',
                 render: function (data, type, row) {
-                    let transactionTypeClass = '';
-
-                    if (data === 'withdraw') {
-                        transactionTypeClass = 'text-primary';
-                    } else if (data === 'deposit') {
-                        transactionTypeClass = 'text-info';
-                    }
-
-                    return `<span class="${transactionTypeClass}" style="font-weight: 600; text-transform: capitalize;">${data}</span>`;
+                    return `<span class="text-primary" style="font-weight: 600; text-transform: capitalize;">${data}</span>`;
                 }
             },
             {

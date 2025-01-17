@@ -1,10 +1,8 @@
-﻿using BankApi.Enums;
-
-namespace BankApi.Models;
+﻿namespace BankApi.Models;
 
 public class DepositResponse
 {
-	public Status Status { get; set; } = Status.Rejected;
+	public string Status { get; set; } = string.Empty;
 	public string PaymentUrl { get; set; } = string.Empty;
 	public string Message { get; set; } = string.Empty;
 }
