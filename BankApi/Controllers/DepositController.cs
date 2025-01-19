@@ -1,5 +1,4 @@
-﻿using BankApi.Enums;
-using BankApi.Models;
+﻿using BankApi.Models;
 using BankApi.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 

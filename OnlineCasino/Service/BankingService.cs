@@ -35,4 +35,25 @@ public class BankingService : IBankingService
 			return bankingDepositResponse;
 		}
 	}
+
+	public async Task<BankingWithdrawResponse> SendWithdrawRequestAsync(BankingWithdrawRequest request)
+	{
+		string apiUrl = "https://localhost:7213/api/Withdraw";
+
+		using (HttpClient client = new HttpClient())
+		{
+			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+			var json = JsonConvert.SerializeObject(request);
+			HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+			HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+			var responseString = await response.Content.ReadAsStringAsync();
+
+			var bankingWithdrawResponse = JsonConvert.DeserializeObject<BankingWithdrawResponse>(responseString);
+
+			return bankingWithdrawResponse;
+		}
+	}
 }

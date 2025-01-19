@@ -13,6 +13,15 @@ $(document).ready(function () {
             confirmButtonText: "Yes, Approve Transaction!"
         }).then((result) => {
             if (result.isConfirmed) {
+                $.ajax({
+                    url: '/ApproveWithdrawRequest',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(id),
+                    success: function (res) {
+                        console.log(res)
+                    },
+                });
                 Swal.fire({
                     title: "Approved!",
                     text: `Withdraw with id ${id} was Approved`,

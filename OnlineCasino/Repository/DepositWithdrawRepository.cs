@@ -16,6 +16,15 @@ public class DepositWithdrawRepository : IDepositWithdrawRepository
 		db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
 	}
 
+	public async Task<DataForBankingWithdrawService> GetDataForBankingWithdrawService(int transactionId)
+	{
+		string sql = "SELECT dw.Amount, u.UserName FROM dbo.DepositWithdrawRequests AS dw INNER JOIN dbo.AspNetUsers AS u ON dw.UserId = u.Id WHERE dw.Id = @Id";
+
+		var result = await db.QueryAsync<DataForBankingWithdrawService>(sql, new { @Id = transactionId });
+
+		return result.Single();
+	}
+
 	public async Task<IEnumerable<RegisteredTransactionRequest>> GetRegisteredTransactionRequests()
 	{
 		string sql =
@@ -37,8 +46,8 @@ public class DepositWithdrawRepository : IDepositWithdrawRepository
 
 		parameters.Add("userId", userId);
 		parameters.Add("amount", amount);
-		parameters.Add("transactionId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 		parameters.Add("status", dbType: DbType.Int32, direction: ParameterDirection.Output);
+		parameters.Add("transactionId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
 		await db.ExecuteAsync(sql, param: parameters, commandType: CommandType.StoredProcedure);
 
@@ -48,17 +57,40 @@ public class DepositWithdrawRepository : IDepositWithdrawRepository
 		return new DepositResponse { Status = status, TransactionId = transactionId };
 	}
 
-	public Task<int> RegisterWithdraw(string userId, decimal amount)
+	public async Task<WithdrawResponse> RegisterWithdraw(string userId, decimal amount)
 	{
-		throw new NotImplementedException();
+		string sql = "dbo.RegisterWithdraw";
+
+		DynamicParameters parameters = new DynamicParameters();
+
+		parameters.Add("userId", userId);
+		parameters.Add("amount", amount);
+		parameters.Add("status", dbType: DbType.Int32, direction: ParameterDirection.Output);
+		parameters.Add("transactionId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+		parameters.Add("message", dbType: DbType.String, size: 100, direction: ParameterDirection.Output);
+
+		await db.ExecuteAsync(sql, param: parameters, commandType: CommandType.StoredProcedure);
+
+		var status = parameters.Get<int>("status");
+		var transactionId = parameters.Get<int>("transactionId");
+		var message = parameters.Get<string>("message");
+
+		return new WithdrawResponse { Status = status, TransactioId = transactionId, Message = message };
 	}
 
 	public async Task<string> RejectWithdrawRequest(int transactionRequestId)
 	{
-		string sql = "UPDATE dbo.DepositWithdrawRequests SET Status = 'rejected' WHERE Id = @Id AND TransactionType = 'withdraw'";
+		string sql = "dbo.RejectWithdrawRequest";
 
-		await db.ExecuteAsync(sql, new { @Id = transactionRequestId });
+		DynamicParameters parameters = new DynamicParameters();
 
-		return "Withdraw Request Was Rejected!";
+		parameters.Add("transactionId", transactionRequestId);
+		parameters.Add("message", dbType: DbType.String, size: 100, direction: ParameterDirection.Output);
+
+		await db.ExecuteAsync(sql, param: parameters, commandType: CommandType.StoredProcedure);
+
+		var message = parameters.Get<string>("message");
+
+		return message;
 	}
 }

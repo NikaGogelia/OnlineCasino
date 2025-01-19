@@ -30,7 +30,7 @@ public class DepositService : IDepositService
 			return new DepositResponse { Status = Status.Rejected.ToString(), Message = "Amount Should Be Even!" };
 		}
 
-		string paymentUrl = "/payment/finalize?" + request.TransactionId;
+		string paymentUrl = "/finalizepayment/" + request.TransactionId;
 
 		return new DepositResponse { Status = Status.Success.ToString(), PaymentUrl = paymentUrl };
 	}

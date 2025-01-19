@@ -48,24 +48,61 @@ public class DepositWithdrawController : Controller
 			return Json(new { status = 0, message = "user not found" });
 		}
 
-		var result = await _depositWithdrawRepository.RegisterDeposit(userId, request.Amount);
+		var registeredDeposit = await _depositWithdrawRepository.RegisterDeposit(userId, request.Amount);
 
-		if (result.Status != 1)
+		if (registeredDeposit.Status != 1)
 		{
-			return Json(new { status = result.Status, message = "Something went wrong" });
+			return Json(new { status = registeredDeposit.Status, message = "Something went wrong!" });
 		}
 
 		var apiRequest = new BankingDepositRequest
 		{
 			Amount = request.Amount,
-			TransactionId = result.TransactionId,
+			TransactionId = registeredDeposit.TransactionId,
 			MerchantId = _appSettings.MerchantId,
-			Hash = HashDepositService.GenerateHash(request.Amount, _appSettings.MerchantId, result.TransactionId, _appSettings.SecretKey)
+			Hash = HashDepositService.GenerateHash(request.Amount, _appSettings.MerchantId, registeredDeposit.TransactionId, _appSettings.SecretKey)
 		};
 
 		var bankingApiResponse = await _bankingService.SendDepositRequestAsync(apiRequest);
 
-		return Json(new { status = result.Status, message = "Success", url = bankingApiResponse.PaymentUrl });
+		return Json(new { status = registeredDeposit.Status, message = bankingApiResponse.Status, url = bankingApiResponse.PaymentUrl });
+	}
+
+	[HttpPost("RegisterWithdraw")]
+	public async Task<IActionResult> RegisterWithdraw([FromBody] TransactionRequest request)
+	{
+		var userId = _userManager.GetUserId(User);
+
+		if (userId == null)
+		{
+			return Json(new { status = 0, message = "user not found" });
+		}
+
+		var registeredDeposit = await _depositWithdrawRepository.RegisterWithdraw(userId, request.Amount);
+
+		return Json(new { status = registeredDeposit.Status, transactionId = registeredDeposit.TransactioId, message = registeredDeposit.Message });
+	}
+
+	[HttpPost("ApproveWithdrawRequest")]
+	public async Task<IActionResult> ApproveWithdrawRequest([FromBody] int id)
+	{
+		var getDataForBankingService = await _depositWithdrawRepository.GetDataForBankingWithdrawService(id);
+
+		var usersAccountNumber = 1234567;
+
+		var apiRequest = new BankingWithdrawRequest
+		{
+			TransactionId = id,
+			Amount = getDataForBankingService.Amount,
+			MerchantId = _appSettings.MerchantId,
+			UsersAccountNumber = usersAccountNumber,
+			UsersFullName = getDataForBankingService.UserName,
+			Hash = HashWithdrawService.GenerateHash(getDataForBankingService.Amount, _appSettings.MerchantId, id, usersAccountNumber, getDataForBankingService.UserName, _appSettings.SecretKey)
+		};
+
+		var approve = await _bankingService.SendWithdrawRequestAsync(apiRequest);
+
+		return Ok(approve);
 	}
 
 	[HttpPut("RejectWithdrawRequest")]

@@ -16,6 +16,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddScoped<IDepositService, DepositService>();
+builder.Services.AddScoped<IWithdrawService, WithdrawService>();
 
 builder.Services.AddControllers();
 

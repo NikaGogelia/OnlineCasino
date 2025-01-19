@@ -11,7 +11,7 @@
 });
 
 $(document).ready(function () {
-    $('#transactionFormDeposit').submit(function (e) {
+    $('#transactionFormWithdraw').submit(function (e) {
         e.preventDefault();
 
         var amount = $('#amount').val();
@@ -21,21 +21,21 @@ $(document).ready(function () {
         };
 
         $.ajax({
-            url: '/RegisterDeposit',
+            url: '/RegisterWithdraw',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(requestData),
             success: function (response) {
                 Toast.fire({
                     icon: "success",
-                    title: "Deposit Request Was Successful!"
+                    title: "Withdraw Request Was Successful!"
                 });
                 console.log(response);
             },
             error: function () {
                 Toast.fire({
                     icon: "error",
-                    title: "Deposit Request Failed!"
+                    title: "Withdraw Request Failed!"
                 });
             }
         });
