@@ -23,6 +23,7 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IDepositWithdrawRepository, DepositWithdrawRepository>();
+builder.Services.AddScoped<ICallbackRepository, CallbackRepository>();
 builder.Services.AddScoped<IBankingService, BankingService>();
 
 builder.Services.AddHttpClient();

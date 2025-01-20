@@ -29,7 +29,6 @@ $(document).ready(function () {
                 });
             }
         });
-        // make request on bank api for withdraw
     });
 
     $('#DashboardTable').on('click', '#rejectRequest', function () {

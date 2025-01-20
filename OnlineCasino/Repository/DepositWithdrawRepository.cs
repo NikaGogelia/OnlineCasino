@@ -25,6 +25,19 @@ public class DepositWithdrawRepository : IDepositWithdrawRepository
 		return result.Single();
 	}
 
+	public async Task<RegisteredTransactionRequest> GetRegisteredTransactionRequest(int transactionId)
+	{
+		string sql =
+			"SELECT dpw.Id, u.UserName, dpw.TransactionType, dpw.Amount, dpw.Status FROM dbo.DepositWithdrawRequests AS dpw " +
+			"INNER JOIN dbo.AspNetUsers AS u " +
+			"ON dpw.UserId = u.Id " +
+			"WHERE dpw.Id = @Id";
+
+		var result = await db.QueryAsync<RegisteredTransactionRequest>(sql, new { @Id = transactionId });
+
+		return result.Single();
+	}
+
 	public async Task<IEnumerable<RegisteredTransactionRequest>> GetRegisteredTransactionRequests()
 	{
 		string sql =

@@ -30,7 +30,7 @@ $(document).ready(function () {
                     icon: "success",
                     title: "Deposit Request Was Successful!"
                 });
-                console.log(response);
+                setTimeout(() => window.location.href = response.url, 3000);
             },
             error: function () {
                 Toast.fire({

@@ -23,6 +23,13 @@ public class WithdrawService : IWithdrawService
 			return new WithdrawResponse { Status = Status.Rejected.ToString(), Message = "Invalid Hash!" };
 		}
 
+		bool isAmountEven = request.Amount % 2 == 0;
+
+		if (!isAmountEven)
+		{
+			return new WithdrawResponse { Status = Status.Rejected.ToString(), Message = "Amount Should Be Even!" };
+		}
+
 		return new WithdrawResponse { Status = Status.Success.ToString() };
 	}
 

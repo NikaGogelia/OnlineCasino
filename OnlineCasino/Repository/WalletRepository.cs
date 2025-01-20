@@ -14,6 +14,7 @@ public class WalletRepository : IWalletRepository
 	{
 		db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
 	}
+
 	public async Task<Balance> GetWalletBalance(string userId)
 	{
 		string sql = "SELECT w.CurrentBallance, c.CurrencyName FROM Wallet AS w INNER JOIN Currency AS c ON w.Currency = c.Id WHERE w.UserId = @UserId";

@@ -20,6 +20,8 @@ builder.Services.AddScoped<IWithdrawService, WithdrawService>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

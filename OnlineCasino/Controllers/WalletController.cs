@@ -23,6 +23,7 @@ namespace OnlineCasino.Controllers
 		{
 			var user = await _user.GetUserAsync(User);
 			if (user == null)
+
 			{
 				return Unauthorized();
 			}

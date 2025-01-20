@@ -15,12 +15,20 @@ namespace BankApi.Controllers
 			_depositService = depositService;
 		}
 
-		[HttpPost]
+		[HttpPost("ProcessDeposit")]
 		public async Task<IActionResult> ProcessDeposit([FromBody] DepositRequest request)
 		{
 			var result = await _depositService.ProcessDepositRequest(request);
 
 			return Ok(result);
+		}
+
+		[HttpPost("CompleteDepositSendToCallback")]
+		public async Task<IActionResult> CompleteDepositSendToCallback([FromBody] CallbackRequest request)
+		{
+			var response = await _depositService.SendRequestToCallback(request);
+
+			return Ok(response);
 		}
 	}
 }

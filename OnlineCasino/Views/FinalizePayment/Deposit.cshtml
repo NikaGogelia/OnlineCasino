@@ -1,0 +1,37 @@
+﻿@model RegisteredTransactionRequest
+
+@{
+	ViewData["Title"] = "Complete Deposit";
+}
+
+<div class="finalize-payment-page text-center">
+	<h1>Complete Deposit</h1>
+	<h2>@ViewBag.StatusMessage</h2>
+	<p>Status: @ViewBag.Status</p>
+	<p>Transaction ID: @Model.Id</p>
+	@if (ViewBag.Status == "Success")
+	{
+		<form id="transactionDepositSuccessForm">
+			<div class="form-group">
+				<label for="amount">Amount</label>
+				<input disabled type="number" class="form-control" id="amount" name="amount" value="@Model.Amount" />
+			</div>
+			<div class="form-group">
+				<label for="card-number">Enter Card Number</label>
+				<input required type="text" class="form-control" id="card-number" name="card-number" />
+			</div>
+			<button type="submit" id="transactionSuccessDepositBtn" class="btn btn-success">Complete</button>
+		</form>
+	}
+	else
+	{
+		<div class="form-group">
+			<label for="amount">Amount</label>
+			<input disabled type="number" class="form-control" id="amount" name="amount" value="@Model.Amount" />
+		</div>
+		<button id="transactionRejectDepositBtn" class="btn btn-success">Complete</button>
+	}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/js/FinalizePayment.js" asp-append-version="true"></script>
