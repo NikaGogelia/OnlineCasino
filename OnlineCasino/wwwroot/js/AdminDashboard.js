@@ -18,8 +18,8 @@ $(document).ready(function () {
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(id),
-                    success: function (res) {
-                        console.log(res)
+                    success: function () {
+                        table.ajax.reload();
                     },
                 });
                 Swal.fire({
@@ -99,11 +99,11 @@ $(document).ready(function () {
                 render: function (data, type, row) {
                     let statusClass = '';
 
-                    if (data === 'pending') {
+                    if (data.toLowerCase() === 'pending') {
                         statusClass = 'text-warning';
-                    } else if (data === 'approved') {
+                    } else if (data.toLowerCase() === 'success') {
                         statusClass = 'text-success';
-                    } else if (data === 'rejected') {
+                    } else if (data.toLowerCase() === 'rejected') {
                         statusClass = 'text-danger';
                     }
 
@@ -113,15 +113,15 @@ $(document).ready(function () {
             {
                 data: null,
                 render: (data, type, row) => {
-                    if (row.transactionType == 'withdraw') {
-                        if (row.status == 'pending') {
+                    if (row.transactionType === 'withdraw') {
+                        if (row.status === 'pending') {
                             return `<button id="approveRequest" type="button" class="btn btn-success me-1" data-id="${row.id}">Approve</button>
                             <button id="rejectRequest" type="button" class="btn btn-danger" data-id="${row.id}">Reject</button>`
+                        } else if (row.status.toLowerCase() === 'success') {
+                            return '<span class="text-secondary" style="font-weight: 600; text-transform: capitalize;">Approved</span>'
                         } else {
-                            return ''
+                            return '<span class="text-secondary" style="font-weight: 600; text-transform: capitalize;">Rejected</span>'
                         }
-                    } else {
-                        return ''
                     }
                 },
             }

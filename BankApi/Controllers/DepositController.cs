@@ -15,7 +15,7 @@ namespace BankApi.Controllers
 			_depositService = depositService;
 		}
 
-		[HttpPost("ProcessDeposit")]
+		[HttpPost]
 		public async Task<IActionResult> ProcessDeposit([FromBody] DepositRequest request)
 		{
 			var result = await _depositService.ProcessDepositRequest(request);

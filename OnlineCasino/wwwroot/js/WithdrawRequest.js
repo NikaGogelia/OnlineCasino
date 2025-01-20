@@ -26,11 +26,18 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(requestData),
             success: function (response) {
-                Toast.fire({
-                    icon: "success",
-                    title: "Withdraw Request Was Successful!"
-                });
-                console.log(response);
+
+                if (response.status === 1) {
+                    Toast.fire({
+                        icon: "success",
+                        title: response.message
+                    });
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message
+                    });
+                }
             },
             error: function () {
                 Toast.fire({

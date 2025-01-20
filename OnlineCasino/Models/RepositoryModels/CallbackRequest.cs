@@ -1,4 +1,4 @@
-﻿namespace BankApi.Models;
+﻿namespace OnlineCasino.Models.RepositoryModels;
 
 public class CallbackRequest
 {

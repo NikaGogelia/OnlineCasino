@@ -11,7 +11,7 @@ public class BankingService : IBankingService
 {
 	public async Task<BankingDepositResponse> SendDepositRequestAsync(BankingDepositRequest request)
 	{
-		string apiUrl = "https://localhost:7213/api/Deposit/ProcessDeposit";
+		string apiUrl = "https://localhost:7213/api/Deposit";
 
 		using (HttpClient client = new HttpClient())
 		{

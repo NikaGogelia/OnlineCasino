@@ -1,4 +1,4 @@
-﻿namespace OnlineCasino.Models;
+﻿namespace OnlineCasino.Models.RepositoryModels;
 
 public class TransactionRequest
 {

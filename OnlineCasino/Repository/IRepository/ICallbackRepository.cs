@@ -4,5 +4,6 @@ namespace OnlineCasino.Repository.IRepository;
 
 public interface ICallbackRepository
 {
-	Task<DepositCallbackResponse> CompleteDeposit(int transactionId, decimal amount, string status);
+	Task<CallbackResponse> CompleteDeposit(int transactionId, decimal amount, string status);
+	Task<CallbackResponse> CompleteWithdraw(int transactionId, decimal amount, string status);
 }

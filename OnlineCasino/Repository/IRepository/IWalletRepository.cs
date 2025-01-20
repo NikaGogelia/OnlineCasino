@@ -1,4 +1,4 @@
-﻿using OnlineCasino.Models;
+﻿using OnlineCasino.Models.RepositoryModels;
 
 namespace OnlineCasino.Repository.IRepository;
 

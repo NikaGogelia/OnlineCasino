@@ -16,9 +16,13 @@ namespace BankApi.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> ProcessDeposit([FromBody] WithdrawRequest request)
+		public async Task<IActionResult> ProcessWithdraw([FromBody] WithdrawRequest request)
 		{
 			var result = await _withdrawService.ProcessWithdrawRequest(request);
+
+			var callbackRequest = new CallbackRequest { Amount = request.Amount, TransactionId = request.TransactionId, Status = result.Status };
+
+			var callbackResponse = await _withdrawService.SendRequestToCallback(callbackRequest);
 
 			return Ok(result);
 		}
