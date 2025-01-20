@@ -4,14 +4,14 @@
 
 
 <div class="deposit-page" id="deposit">
-	<h1>How much you want to Deposit</h1>
+	<h1 class="mb-4">How much you want to <span class="text-primary">Deposit</span></h1>
 	<form id="transactionFormDeposit" method="post">
 		<div class="form-group">
 			<label for="amount">Enter Amount</label>
 			<input type="number" class="form-control" id="amount" name="amount" step="0.01" min="0.01" />
 		</div>
-		<button id="depositSend" type="submit" class="btn btn-success">Deposit</button>
-		<a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+		<button id="depositSend" type="submit" class="btn btn-success mt-4">Deposit</button>
+		<a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mt-4">Cancel</a>
 	</form>
 </div>
 

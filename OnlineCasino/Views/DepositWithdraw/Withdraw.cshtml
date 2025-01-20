@@ -4,14 +4,14 @@
 
 
 <div class="withdraw-page" id="withdraw">
-	<h1>How much you want to Withdraw</h1>
+	<h1 class="mb-4">How much you want to <span class="text-primary">Withdraw</span></h1>
 	<form id="transactionFormWithdraw" method="post">
 		<div class="form-group">
 			<label for="amount">Enter Amount</label>
 			<input type="number" class="form-control" id="amount" name="amount" step="0.01" min="0.01" required />
 		</div>
-		<button id="withdrawSend" type="submit" class="btn btn-success">Withdraw</button>
-		<a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+		<button id="withdrawSend" type="submit" class="btn btn-success mt-4">Withdraw</button>
+		<a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mt-4">Cancel</a>
 	</form>
 </div>
 
