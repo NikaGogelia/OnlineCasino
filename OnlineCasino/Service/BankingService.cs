@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using BankApi;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using OnlineCasino.Models.Banking;
 using OnlineCasino.Service.IService;
 using System.Globalization;
@@ -9,9 +11,16 @@ namespace OnlineCasino.Service;
 
 public class BankingService : IBankingService
 {
+	private readonly AppSettings _appSettings;
+
+	public BankingService(IOptions<AppSettings> appSettings)
+	{
+		_appSettings = appSettings.Value;
+	}
+
 	public async Task<BankingDepositResponse> SendDepositRequestAsync(BankingDepositRequest request)
 	{
-		string apiUrl = "https://localhost:7213/api/Deposit";
+		string apiUrl = $"{_appSettings.BankApiUrl}/api/Deposit";
 
 		using (HttpClient client = new HttpClient())
 		{
@@ -38,7 +47,7 @@ public class BankingService : IBankingService
 
 	public async Task<BankingWithdrawResponse> SendWithdrawRequestAsync(BankingWithdrawRequest request)
 	{
-		string apiUrl = "https://localhost:7213/api/Withdraw";
+		string apiUrl = $"{_appSettings.BankApiUrl}/api/Withdraw";
 
 		using (HttpClient client = new HttpClient())
 		{

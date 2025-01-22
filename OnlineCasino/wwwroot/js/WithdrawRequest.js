@@ -26,7 +26,6 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(requestData),
             success: function (response) {
-
                 if (response.status === 1) {
                     Toast.fire({
                         icon: "success",

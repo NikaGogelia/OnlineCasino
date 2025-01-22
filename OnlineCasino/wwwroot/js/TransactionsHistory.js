@@ -40,6 +40,20 @@ $(document).ready(function () {
                 }
             },
             {
+                data: 'transactionType',
+                render: function (data, type, row) {
+                    let transactionTypeClass = '';
+
+                    if (data === 'withdraw') {
+                        transactionTypeClass = 'text-primary';
+                    } else if (data === 'deposit') {
+                        transactionTypeClass = 'text-info';
+                    }
+
+                    return `<span class="${transactionTypeClass}" style="font-weight: 700; text-transform: capitalize;">${data}</span>`;
+                }
+            },
+            {
                 data: 'createdAt',
                 render: function (data, type, row) {
                     const date = new Date(data);

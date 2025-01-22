@@ -11,11 +11,11 @@ namespace BankApi.Service;
 
 public class DepositService : IDepositService
 {
-	private readonly string _secretKey;
+	private readonly AppSettings _appSettings;
 
 	public DepositService(IOptions<AppSettings> appSettings)
 	{
-		_secretKey = appSettings.Value.SecretKey;
+		_appSettings = appSettings.Value;
 	}
 
 	public async Task<DepositResponse> ProcessDepositRequest(DepositRequest request)
@@ -42,7 +42,7 @@ public class DepositService : IDepositService
 
 	public async Task<CallbackResponse> SendRequestToCallback(CallbackRequest request)
 	{
-		string apiUrl = "http://localhost:5117/CompleteDeposit";
+		string apiUrl = $"{_appSettings.CallbackApiUrl}/CompleteDeposit";
 
 		using (HttpClient client = new HttpClient())
 		{
@@ -63,7 +63,7 @@ public class DepositService : IDepositService
 
 	private bool ValidateHash(DepositRequest request)
 	{
-		string concatenatedParams = $"{request.Amount}{request.MerchantId}{request.TransactionId}{_secretKey}";
+		string concatenatedParams = $"{request.Amount}{request.MerchantId}{request.TransactionId}{_appSettings.SecretKey}";
 		string calculatedHash = CalculateSha256Hash(concatenatedParams);
 
 		return calculatedHash.Equals(request.Hash, StringComparison.OrdinalIgnoreCase);

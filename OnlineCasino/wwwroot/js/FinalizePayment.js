@@ -10,6 +10,8 @@
     }
 });
 
+const BankApiUrl = "https://localhost:7213";
+
 $(document).ready(function () {
     const path = window.location.pathname;
 
@@ -26,11 +28,10 @@ $(document).ready(function () {
                     transactionId: id,
                     amount: parseFloat(amount),
                     status: status.toLowerCase()
-
                 };
 
                 $.ajax({
-                    url: 'https://localhost:7213/api/Deposit/CompleteDepositSendToCallback',
+                    url: `${BankApiUrl}/api/Deposit/CompleteDepositSendToCallback`,
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(requestData),
@@ -57,11 +58,10 @@ $(document).ready(function () {
                     transactionId: id,
                     amount: parseFloat(amount),
                     status: status.toLowerCase()
-
                 };
 
                 $.ajax({
-                    url: 'https://localhost:7213/api/Deposit/CompleteDepositSendToCallback',
+                    url: `${BankApiUrl}/api/Deposit/CompleteDepositSendToCallback`,
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(requestData),

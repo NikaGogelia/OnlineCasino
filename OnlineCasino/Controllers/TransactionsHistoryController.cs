@@ -28,6 +28,11 @@ namespace OnlineCasino.Controllers
 		{
 			var userId = _userManager.GetUserId(User);
 
+			if (userId == null)
+			{
+				return NotFound("User Not Found!");
+			}
+
 			var transactions = await _transactionsRepository.GetAllTransactionsForCurrentUser(userId);
 
 			return Ok(transactions);

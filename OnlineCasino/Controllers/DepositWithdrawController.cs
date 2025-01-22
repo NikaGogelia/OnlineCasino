@@ -45,14 +45,19 @@ public class DepositWithdrawController : Controller
 
 		if (userId == null)
 		{
-			return Json(new { status = 0, message = "user not found" });
+			return Json(new { status = 0, message = "User Not Found!" });
 		}
 
 		var registeredDeposit = await _depositWithdrawRepository.RegisterDeposit(userId, request.Amount);
 
-		if (registeredDeposit.Status != 1)
+		if (registeredDeposit.Status == 0)
 		{
-			return Json(new { status = registeredDeposit.Status, message = "Something went wrong!" });
+			return Json(new { status = registeredDeposit.Status, message = "Invalid Amount!" });
+		}
+
+		if (registeredDeposit.Status == -1)
+		{
+			return Json(new { status = registeredDeposit.Status, message = "Pending Deposit Is Already Registered!" });
 		}
 
 		var apiRequest = new BankingDepositRequest

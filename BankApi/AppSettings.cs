@@ -2,5 +2,6 @@
 
 public class AppSettings
 {
-	public string SecretKey { get; set; }
+	public required string SecretKey { get; set; }
+	public required string CallbackApiUrl { get; set; }
 }

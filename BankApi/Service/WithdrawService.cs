@@ -11,11 +11,11 @@ namespace BankApi.Service;
 
 public class WithdrawService : IWithdrawService
 {
-	private readonly string _secretKey;
+	private readonly AppSettings _appSettings;
 
 	public WithdrawService(IOptions<AppSettings> appSettings)
 	{
-		_secretKey = appSettings.Value.SecretKey;
+		_appSettings = appSettings.Value;
 	}
 
 	public async Task<WithdrawResponse> ProcessWithdrawRequest(WithdrawRequest request)
@@ -37,7 +37,7 @@ public class WithdrawService : IWithdrawService
 
 	public async Task<CallbackResponse> SendRequestToCallback(CallbackRequest request)
 	{
-		string apiUrl = "http://localhost:5117/CompleteWithdraw";
+		string apiUrl = $"{_appSettings.CallbackApiUrl}/CompleteWithdraw";
 
 		using (HttpClient client = new HttpClient())
 		{
@@ -58,7 +58,7 @@ public class WithdrawService : IWithdrawService
 
 	private bool ValidateHash(WithdrawRequest request)
 	{
-		string concatenatedParams = $"{request.Amount}{request.MerchantId}{request.TransactionId}{request.UsersAccountNumber}{request.UsersFullName}{_secretKey}";
+		string concatenatedParams = $"{request.Amount}{request.MerchantId}{request.TransactionId}{request.UsersAccountNumber}{request.UsersFullName}{_appSettings.SecretKey}";
 		string calculatedHash = CalculateSha256Hash(concatenatedParams);
 
 		return calculatedHash.Equals(request.Hash, StringComparison.OrdinalIgnoreCase);

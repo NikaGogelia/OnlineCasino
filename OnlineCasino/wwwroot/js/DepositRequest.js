@@ -26,11 +26,27 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(requestData),
             success: function (response) {
-                Toast.fire({
-                    icon: "success",
-                    title: "Deposit Request Was Successful!"
-                });
-                setTimeout(() => window.location.href = response.url, 3000);
+                if (response.status === -1) {
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message
+                    });
+                }
+
+                if (response.status === 0) {
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message
+                    });
+                }
+
+                if (response.status === 1) {
+                    Toast.fire({
+                        icon: "success",
+                        title: "Deposit Request Was Successful!"
+                    });
+                    setTimeout(() => window.location.href = response.url, 3000);
+                }
             },
             error: function () {
                 Toast.fire({

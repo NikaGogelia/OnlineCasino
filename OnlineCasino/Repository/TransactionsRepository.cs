@@ -18,7 +18,7 @@ public class TransactionsRepository : ITransactionsRepository
 	public async Task<IEnumerable<Transaction>> GetAllTransactionsForCurrentUser(string userId)
 	{
 		string sql =
-			"SELECT t.Id, u.UserName, t.Amount, t.Status, t.CreatedAt FROM dbo.Transactions AS t " +
+			"SELECT t.Id, u.UserName, t.Amount, t.Status, t.TransactionType ,t.CreatedAt FROM dbo.Transactions AS t " +
 			"INNER JOIN dbo.AspNetUsers AS u " +
 			"ON t.UserId = u.Id " +
 			"WHERE t.UserId = @Id";
