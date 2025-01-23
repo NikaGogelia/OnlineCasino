@@ -25,19 +25,11 @@ public class DepositService : IDepositService
 			return new DepositResponse { Status = Status.Rejected.ToString(), Message = "Invalid Hash!" };
 		}
 
-		bool isAmountEven = request.Amount % 2 == 0;
+		var status = request.Amount % 2 == 0 ? Status.Success : Status.Rejected;
 
-		string paymentUrl = "";
+		string paymentUrl = $"{_appSettings.CallbackApiUrl}/FinalizePayment/Deposit/{request.TransactionId}/{status.ToString()}";
 
-		if (!isAmountEven)
-		{
-			paymentUrl = $"/FinalizePayment/Deposit/{request.TransactionId}/{Status.Rejected.ToString()}";
-			return new DepositResponse { Status = Status.Rejected.ToString(), PaymentUrl = paymentUrl, Message = "Amount Should Be Even!" };
-		}
-
-		paymentUrl = $"/FinalizePayment/Deposit/{request.TransactionId}/{Status.Success.ToString()}";
-
-		return new DepositResponse { Status = Status.Success.ToString(), PaymentUrl = paymentUrl, Message = "Deposit Transaction Success!" };
+		return new DepositResponse { Status = status.ToString(), PaymentUrl = paymentUrl, Message = "Deposit Transaction Success!" };
 	}
 
 	public async Task<CallbackResponse> SendRequestToCallback(CallbackRequest request)
