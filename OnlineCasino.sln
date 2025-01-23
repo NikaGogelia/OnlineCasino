@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineCasino", "OnlineCasin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankApi", "BankApi\BankApi.csproj", "{481642FD-1019-4F59-A5DE-7FBC1004B762}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineCasinoAPI", "OnlineCasinoAPI\OnlineCasinoAPI.csproj", "{A4474D48-8512-48B3-ACC5-009BCE234E06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{481642FD-1019-4F59-A5DE-7FBC1004B762}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{481642FD-1019-4F59-A5DE-7FBC1004B762}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{481642FD-1019-4F59-A5DE-7FBC1004B762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4474D48-8512-48B3-ACC5-009BCE234E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4474D48-8512-48B3-ACC5-009BCE234E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4474D48-8512-48B3-ACC5-009BCE234E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4474D48-8512-48B3-ACC5-009BCE234E06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
