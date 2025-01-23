@@ -16,16 +16,24 @@ namespace OnlineCasino.Controllers;
 public class DepositWithdrawController : Controller
 {
 	private readonly UserManager<ApplicationUser> _userManager;
+	private readonly ILogger<DepositWithdrawController> _logger;
+	private readonly AppSettings _appSettings;
 	private readonly IDepositWithdrawRepository _depositWithdrawRepository;
 	private readonly IBankingService _bankingService;
-	private readonly AppSettings _appSettings;
 
-	public DepositWithdrawController(IDepositWithdrawRepository depositWithdrawRepository, UserManager<ApplicationUser> userManager, IBankingService bankingService, IOptions<AppSettings> appSettings)
+	public DepositWithdrawController(
+		UserManager<ApplicationUser> userManager,
+		ILogger<DepositWithdrawController> logger,
+		IOptions<AppSettings> appSettings,
+		IDepositWithdrawRepository depositWithdrawRepository,
+		IBankingService bankingService
+	)
 	{
 		_userManager = userManager;
+		_logger = logger;
+		_appSettings = appSettings.Value;
 		_depositWithdrawRepository = depositWithdrawRepository;
 		_bankingService = bankingService;
-		_appSettings = appSettings.Value;
 	}
 
 	public IActionResult Deposit()
@@ -45,6 +53,7 @@ public class DepositWithdrawController : Controller
 
 		if (userId == null)
 		{
+			_logger.LogError("User Not Found!");
 			return Json(new { status = 0, message = "User Not Found!" });
 		}
 
@@ -52,13 +61,17 @@ public class DepositWithdrawController : Controller
 
 		if (registeredDeposit.Status == 0)
 		{
+			_logger.LogError("Invalid Amount!");
 			return Json(new { status = registeredDeposit.Status, message = "Invalid Amount!" });
 		}
 
 		if (registeredDeposit.Status == -1)
 		{
+			_logger.LogError("Pending Deposit Is Already Registered!");
 			return Json(new { status = registeredDeposit.Status, message = "Pending Deposit Is Already Registered!" });
 		}
+
+		_logger.LogInformation("Deposit Registered Successfully.");
 
 		var apiRequest = new BankingDepositRequest
 		{
@@ -70,6 +83,9 @@ public class DepositWithdrawController : Controller
 
 		var bankingApiResponse = await _bankingService.SendDepositRequestAsync(apiRequest);
 
+		_logger.LogInformation("Deposit request sent to banking service.");
+		_logger.LogInformation("Banking API Deposit Response: {@Response}", bankingApiResponse);
+
 		return Json(new { status = registeredDeposit.Status, message = bankingApiResponse.Status, url = bankingApiResponse.PaymentUrl });
 	}
 
@@ -80,10 +96,13 @@ public class DepositWithdrawController : Controller
 
 		if (userId == null)
 		{
+			_logger.LogError("User Not Found!");
 			return Json(new { status = 0, message = "user not found" });
 		}
 
 		var registeredDeposit = await _depositWithdrawRepository.RegisterWithdraw(userId, request.Amount);
+
+		_logger.LogInformation("Withdraw Registered Successfully.");
 
 		return Json(new { status = registeredDeposit.Status, transactionId = registeredDeposit.TransactioId, message = registeredDeposit.Message });
 	}
@@ -107,6 +126,8 @@ public class DepositWithdrawController : Controller
 
 		var approve = await _bankingService.SendWithdrawRequestAsync(apiRequest);
 
+		_logger.LogInformation("Banking API Withdraw Response: {@Response}", approve);
+
 		return Ok(approve);
 	}
 
@@ -114,6 +135,8 @@ public class DepositWithdrawController : Controller
 	public async Task<IActionResult> RejectWithdrawRequest([FromBody] int id)
 	{
 		var reject = await _depositWithdrawRepository.RejectWithdrawRequest(id);
+
+		_logger.LogInformation(reject);
 
 		return Ok(reject);
 	}

@@ -8,9 +8,18 @@ using OnlineCasino.Repository.IRepository;
 using OnlineCasino.Service;
 using OnlineCasino.Service.IService;
 using OnlineCasino.Services;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+builder.Host.UseSerilog((ctx, lc) => lc
+	.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}")
+	.WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:HH:mm:ss} {Level:u3} {SourceContext} {Message:lj}{NewLine}{Exception}", restrictedToMinimumLevel: LogEventLevel.Information)
+	.Enrich.FromLogContext()
+	.ReadFrom.Configuration(ctx.Configuration)
+);
 
 builder.Services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
 
