@@ -34,6 +34,7 @@ builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IDepositWithdrawRepository, DepositWithdrawRepository>();
 builder.Services.AddScoped<ICallbackRepository, CallbackRepository>();
 builder.Services.AddScoped<ITransactionsRepository, TransactionsRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IBankingService, BankingService>();
 
 builder.Services.AddHttpClient();
