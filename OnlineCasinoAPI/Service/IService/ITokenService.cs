@@ -1,6 +1,6 @@
 ﻿using OnlineCasinoAPI.Models;
 
-namespace OnlineCasinoAPI.Services.IService;
+namespace OnlineCasinoAPI.Service.IService;
 
 public interface ITokenService
 {

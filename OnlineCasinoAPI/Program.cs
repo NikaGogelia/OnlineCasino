@@ -1,7 +1,7 @@
 using OnlineCasinoAPI.Repository;
 using OnlineCasinoAPI.Repository.IRepository;
-using OnlineCasinoAPI.Services;
-using OnlineCasinoAPI.Services.IService;
+using OnlineCasinoAPI.Service;
+using OnlineCasinoAPI.Service.IService;
 using Serilog;
 using Serilog.Events;
 
@@ -16,6 +16,8 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IBetRepository, BetRepository>();
+builder.Services.AddScoped<IBetService, BetService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

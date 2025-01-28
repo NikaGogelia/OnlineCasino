@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineCasinoAPI.Models;
-using OnlineCasinoAPI.Services.IService;
+using OnlineCasinoAPI.Service.IService;
 
 namespace OnlineCasinoAPI.Controllers;
 

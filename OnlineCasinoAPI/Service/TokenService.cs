@@ -1,8 +1,8 @@
 ﻿using OnlineCasinoAPI.Models;
 using OnlineCasinoAPI.Repository.IRepository;
-using OnlineCasinoAPI.Services.IService;
+using OnlineCasinoAPI.Service.IService;
 
-namespace OnlineCasinoAPI.Services;
+namespace OnlineCasinoAPI.Service;
 
 public class TokenService : ITokenService
 {
