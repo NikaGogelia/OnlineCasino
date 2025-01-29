@@ -18,6 +18,8 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IBetRepository, BetRepository>();
 builder.Services.AddScoped<IBetService, BetService>();
+builder.Services.AddScoped<IWinRepository, WinRepository>();
+builder.Services.AddScoped<IWinService, WinService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -9,10 +9,12 @@ namespace OnlineCasinoAPI.Controllers
 	public class BetController : ControllerBase
 	{
 		private readonly IBetService _betService;
+		private readonly ILogger<BetController> _logger;
 
-		public BetController(IBetService betService)
+		public BetController(IBetService betService, ILogger<BetController> logger)
 		{
 			_betService = betService;
+			_logger = logger;
 		}
 
 		[HttpPost]
@@ -20,24 +22,47 @@ namespace OnlineCasinoAPI.Controllers
 		{
 			var response = await _betService.Bet(request);
 
-			return response.Status switch
+			_logger.LogInformation("Bet service response: {@Response}", response);
+
+			switch (response.Status)
 			{
-				1 => Ok(new
-				{
-					StatusCode = 200,
-					Data = new
+				case 1:
+					_logger.LogInformation("Bet registered successfully. TransactionId: {TransactionId}, CurrentBalance: {CurrentBalance}",
+						response.TransactionId, response.CurrentBalance);
+					return Ok(new
 					{
-						TransactionId = response.TransactionId?.ToString(),
-						CurrentBalance = response.CurrentBalance
-					}
-				}),
-				-1 => StatusCode(402, new { StatusCode = 402, Message = "Insufficient Balance!" }),
-				-2 => StatusCode(400, new { StatusCode = 400, Message = "Incorrect Currency!" }),
-				-3 => StatusCode(407, new { StatusCode = 407, Message = "Invalid Amount!" }),
-				-4 => StatusCode(411, new { StatusCode = 411, Message = "Invalid Request!" }),
-				-5 => StatusCode(401, new { StatusCode = 401, Message = "Inactive Token!" }),
-				_ => StatusCode(500, new { StatusCode = 500 })
-			};
+						StatusCode = 200,
+						Data = new
+						{
+							TransactionId = response.TransactionId?.ToString(),
+							CurrentBalance = response.CurrentBalance
+						}
+					});
+
+				case -1:
+					_logger.LogWarning("Bet failed: Insufficient balance.");
+					return StatusCode(402, new { StatusCode = 402, Message = "Insufficient Balance!" });
+
+				case -2:
+					_logger.LogWarning("Bet failed: Incorrect currency.");
+					return StatusCode(400, new { StatusCode = 400, Message = "Incorrect Currency!" });
+
+				case -3:
+					_logger.LogWarning("Bet failed: Invalid amount.");
+					return StatusCode(407, new { StatusCode = 407, Message = "Invalid Amount!" });
+
+				case -4:
+					_logger.LogWarning("Bet failed: Invalid request.");
+					return StatusCode(411, new { StatusCode = 411, Message = "Invalid Request!" });
+
+				case -5:
+					_logger.LogWarning("Bet failed: Inactive token.");
+					return StatusCode(401, new { StatusCode = 401, Message = "Inactive Token!" });
+
+				default:
+					_logger.LogError("Unexpected error occurred during bet processing.");
+					return StatusCode(500, new { StatusCode = 500 });
+			}
 		}
 	}
 }
