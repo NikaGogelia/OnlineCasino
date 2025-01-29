@@ -17,4 +17,9 @@ public class BetService : IBetService
 	{
 		return await _betRepository.RegisterBet(betRequest);
 	}
+
+	public async Task<BetResponse> Cancel(CancelBetRequest betRequest)
+	{
+		return await _betRepository.CancelBet(betRequest);
+	}
 }

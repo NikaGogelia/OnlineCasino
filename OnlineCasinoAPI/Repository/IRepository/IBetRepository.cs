@@ -5,4 +5,5 @@ namespace OnlineCasinoAPI.Repository.IRepository;
 public interface IBetRepository
 {
 	Task<BetResponse> RegisterBet(BetRequest request);
+	Task<BetResponse> CancelBet(CancelBetRequest request);
 }
