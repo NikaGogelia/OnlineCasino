@@ -13,13 +13,13 @@ public class BetService : IBetService
 		_betRepository = betRepository;
 	}
 
-	public async Task<BetResponse> Bet(BetRequest betRequest)
+	public async Task<BetResponse> Bet(BetRequest request)
 	{
-		return await _betRepository.RegisterBet(betRequest);
+		return await _betRepository.RegisterBet(request);
 	}
 
-	public async Task<BetResponse> Cancel(CancelBetRequest betRequest)
+	public async Task<BetResponse> Cancel(CancelBetRequest request)
 	{
-		return await _betRepository.CancelBet(betRequest);
+		return await _betRepository.CancelBet(request);
 	}
 }

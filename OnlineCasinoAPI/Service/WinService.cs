@@ -13,8 +13,13 @@ public class WinService : IWinService
 		_winRepository = winRepository;
 	}
 
-	public async Task<WinResponse> Win(WinRequest betRequest)
+	public async Task<WinResponse> Win(WinRequest request)
 	{
-		return await _winRepository.RegisterWin(betRequest);
+		return await _winRepository.RegisterWin(request);
+	}
+
+	public async Task<WinResponse> Change(ChangeWinRequest request)
+	{
+		return await _winRepository.ChangeWin(request);
 	}
 }

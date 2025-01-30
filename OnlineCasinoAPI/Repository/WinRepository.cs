@@ -44,4 +44,36 @@ public class WinRepository : IWinRepository
 			CurrentBalance = currentBalance
 		};
 	}
+
+	public async Task<WinResponse> ChangeWin(ChangeWinRequest request)
+	{
+		string sql = "dbo.ChangeWin";
+
+		DynamicParameters parameters = new DynamicParameters();
+		parameters.Add("token", request.Token);
+		parameters.Add("amount", request.Amount);
+		parameters.Add("previousAmount", request.PreviousAmount);
+		parameters.Add("previousTransactionId", request.PreviousTransactionId);
+		parameters.Add("changeWinTypeId", request.ChangeWinTypeId);
+		parameters.Add("gameId", request.GameId);
+		parameters.Add("productId", request.ProductId);
+		parameters.Add("roundId", request.RoundId);
+		parameters.Add("currencyId", request.CurrencyId);
+		parameters.Add("status", dbType: DbType.Int32, direction: ParameterDirection.Output);
+		parameters.Add("transactionId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+		parameters.Add("currentBalance", dbType: DbType.Decimal, direction: ParameterDirection.Output);
+
+		await db.ExecuteAsync(sql, parameters, commandType: CommandType.StoredProcedure);
+
+		var status = parameters.Get<int>("status");
+		var transactionId = parameters.Get<int?>("transactionId");
+		var currentBalance = parameters.Get<decimal?>("currentBalance");
+
+		return new WinResponse
+		{
+			Status = status,
+			TransactionId = transactionId,
+			CurrentBalance = currentBalance
+		};
+	}
 }

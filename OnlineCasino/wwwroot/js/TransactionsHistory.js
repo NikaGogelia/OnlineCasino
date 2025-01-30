@@ -48,6 +48,14 @@ $(document).ready(function () {
                         transactionTypeClass = 'text-primary';
                     } else if (data === 'deposit') {
                         transactionTypeClass = 'text-info';
+                    } else if (data === 'bet') {
+                        transactionTypeClass = 'text-danger';
+                    } else if (data === 'cancel bet') {
+                        transactionTypeClass = 'text-warning';
+                    } else if (data === 'win') {
+                        transactionTypeClass = 'text-success';
+                    } else if (data === 'change win') {
+                        transactionTypeClass = 'text-success';
                     }
 
                     return `<span class="${transactionTypeClass}" style="font-weight: 700; text-transform: capitalize;">${data}</span>`;

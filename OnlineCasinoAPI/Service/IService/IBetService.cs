@@ -4,6 +4,6 @@ namespace OnlineCasinoAPI.Service.IService;
 
 public interface IBetService
 {
-	Task<BetResponse> Bet(BetRequest betRequest);
-	Task<BetResponse> Cancel(CancelBetRequest betRequest);
+	Task<BetResponse> Bet(BetRequest request);
+	Task<BetResponse> Cancel(CancelBetRequest request);
 }
