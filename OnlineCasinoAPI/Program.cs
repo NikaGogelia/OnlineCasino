@@ -20,6 +20,8 @@ builder.Services.AddScoped<IBetRepository, BetRepository>();
 builder.Services.AddScoped<IBetService, BetService>();
 builder.Services.AddScoped<IWinRepository, WinRepository>();
 builder.Services.AddScoped<IWinService, WinService>();
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
