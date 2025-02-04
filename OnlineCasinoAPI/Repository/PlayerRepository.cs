@@ -19,56 +19,25 @@ public class PlayerRepository : IPlayerRepository
 	{
 		string sql = "dbo.GetBalance";
 
-		DynamicParameters parameters = new DynamicParameters();
-		parameters.Add("token", request.Token);
-		parameters.Add("gameId", request.GameId);
-		parameters.Add("productId", request.ProductId);
-		parameters.Add("currencyId", request.CurrencyId);
-		parameters.Add("status", dbType: DbType.Int32, direction: ParameterDirection.Output);
-		parameters.Add("currentBalance", dbType: DbType.Decimal, direction: ParameterDirection.Output);
-
-		await db.ExecuteAsync(sql, parameters, commandType: CommandType.StoredProcedure);
-
-		var status = parameters.Get<int>("status");
-		var currentBalance = parameters.Get<decimal?>("currentBalance");
-
-		return new GetBalanceResponse
-		{
-			Status = status,
-			CurrentBalance = currentBalance
-		};
+		return await db.QuerySingleOrDefaultAsync<GetBalanceResponse>(
+			sql,
+			new
+			{
+				token = request.Token,
+				gameId = request.GameId,
+				productId = request.ProductId,
+				currencyId = request.CurrencyId
+			},
+			commandType: CommandType.StoredProcedure) ?? new GetBalanceResponse { Status = -5 };
 	}
 
 	public async Task<GetPlayerInfoResponse> GetPlayerInformationWithToken(GetPlayerInfoRequest request)
 	{
 		string sql = "dbo.GetPlayerInfo";
 
-		DynamicParameters parameters = new DynamicParameters();
-		parameters.Add("token", request.Token);
-		parameters.Add("userId", dbType: DbType.String, size: 450, direction: ParameterDirection.Output);
-		parameters.Add("userName", dbType: DbType.String, size: 200, direction: ParameterDirection.Output);
-		parameters.Add("email", dbType: DbType.String, size: 200, direction: ParameterDirection.Output);
-		parameters.Add("currency", dbType: DbType.String, size: 3, direction: ParameterDirection.Output);
-		parameters.Add("currentBalance", dbType: DbType.Decimal, direction: ParameterDirection.Output);
-		parameters.Add("status", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-		await db.ExecuteAsync(sql, parameters, commandType: CommandType.StoredProcedure);
-
-		var userId = parameters.Get<string>("userId");
-		var userName = parameters.Get<string>("userName");
-		var email = parameters.Get<string>("email");
-		var currency = parameters.Get<string>("currency");
-		var currentBalance = parameters.Get<decimal?>("currentBalance");
-		var status = parameters.Get<int>("status");
-
-		return new GetPlayerInfoResponse
-		{
-			Status = status,
-			UserId = userId,
-			UserName = userName,
-			Email = email,
-			Currency = currency,
-			CurrentBalance = currentBalance,
-		};
+		return await db.QuerySingleOrDefaultAsync<GetPlayerInfoResponse>(
+			sql, 
+			new { token = request.Token }, 
+			commandType: CommandType.StoredProcedure) ?? new GetPlayerInfoResponse { Status = -5 };
 	}
 }
