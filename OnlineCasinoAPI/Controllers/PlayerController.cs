@@ -43,7 +43,7 @@ namespace OnlineCasinoAPI.Controllers
 
 				case -5:
 					_logger.LogWarning("GetBalance failed: Inactive token.");
-					return StatusCode(401, new { StatusCode = 401 });
+					return StatusCode(400, new { StatusCode = 401 });
 
 				default:
 					_logger.LogError("Unexpected error occurred during bet processing.");
@@ -77,7 +77,7 @@ namespace OnlineCasinoAPI.Controllers
 
 				case -5:
 					_logger.LogWarning("GetPlayerInfo failed: Inactive token.");
-					return StatusCode(401, new { StatusCode = 401 });
+					return StatusCode(400, new { StatusCode = 401 });
 
 				default:
 					_logger.LogError("GetPlayerInfo error occurred during bet processing.");

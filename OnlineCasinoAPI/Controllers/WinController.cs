@@ -45,15 +45,15 @@ namespace OnlineCasinoAPI.Controllers
 
 				case -3:
 					_logger.LogWarning("Win failed: Invalid amount.");
-					return StatusCode(407, new { StatusCode = 407 });
+					return StatusCode(400, new { StatusCode = 407 });
 
 				case -4:
 					_logger.LogWarning("Win failed: Invalid request.");
-					return StatusCode(411, new { StatusCode = 411 });
+					return StatusCode(400, new { StatusCode = 411 });
 
 				case -5:
 					_logger.LogWarning("Win failed: Inactive token.");
-					return StatusCode(401, new { StatusCode = 401 });
+					return StatusCode(400, new { StatusCode = 401 });
 
 				default:
 					_logger.LogError("Unexpected error occurred during Win processing.");
@@ -89,15 +89,15 @@ namespace OnlineCasinoAPI.Controllers
 
 				case -3:
 					_logger.LogWarning("Change Win failed: Invalid amount.");
-					return StatusCode(407, new { StatusCode = 407 });
+					return StatusCode(400, new { StatusCode = 407 });
 
 				case -4:
 					_logger.LogWarning("Change Win failed: Invalid request.");
-					return StatusCode(411, new { StatusCode = 411 });
+					return StatusCode(400, new { StatusCode = 411 });
 
 				case -5:
 					_logger.LogWarning("Change Win failed: Inactive token.");
-					return StatusCode(401, new { StatusCode = 401 });
+					return StatusCode(400, new { StatusCode = 401 });
 
 				default:
 					_logger.LogError("Unexpected error occurred during Change Win processing.");
