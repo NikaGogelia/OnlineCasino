@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using OnlineCasino.Repository.IRepository;
 
 namespace OnlineCasino.Areas.Identity.Data;

@@ -41,23 +41,23 @@ namespace OnlineCasinoAPI.Controllers
 
 				case -1:
 					_logger.LogWarning("Bet failed: Insufficient balance.");
-					return StatusCode(402, new { StatusCode = 402, Message = "Insufficient Balance!" });
+					return StatusCode(402, new { StatusCode = 402 });
 
 				case -2:
 					_logger.LogWarning("Bet failed: Incorrect currency.");
-					return StatusCode(400, new { StatusCode = 400, Message = "Incorrect Currency!" });
+					return StatusCode(400, new { StatusCode = 400 });
 
 				case -3:
 					_logger.LogWarning("Bet failed: Invalid amount.");
-					return StatusCode(407, new { StatusCode = 407, Message = "Invalid Amount!" });
+					return StatusCode(407, new { StatusCode = 407 });
 
 				case -4:
 					_logger.LogWarning("Bet failed: Invalid request.");
-					return StatusCode(411, new { StatusCode = 411, Message = "Invalid Request!" });
+					return StatusCode(411, new { StatusCode = 411 });
 
 				case -5:
 					_logger.LogWarning("Bet failed: Inactive token.");
-					return StatusCode(401, new { StatusCode = 401, Message = "Inactive Token!" });
+					return StatusCode(401, new { StatusCode = 401 });
 
 				default:
 					_logger.LogError("Unexpected error occurred during bet processing.");
@@ -89,19 +89,19 @@ namespace OnlineCasinoAPI.Controllers
 
 				case -2:
 					_logger.LogWarning("Bet cancellation failed: Incorrect currency.");
-					return StatusCode(400, new { StatusCode = 400, Message = "Incorrect Currency!" });
+					return StatusCode(400, new { StatusCode = 400 });
 
 				case -3:
 					_logger.LogWarning("Bet cancellation failed: Invalid amount.");
-					return StatusCode(407, new { StatusCode = 407, Message = "Invalid Amount!" });
+					return StatusCode(407, new { StatusCode = 407 });
 
 				case -4:
 					_logger.LogWarning("Bet cancellation failed: Invalid request.");
-					return StatusCode(411, new { StatusCode = 411, Message = "Invalid Request!" });
+					return StatusCode(411, new { StatusCode = 411 });
 
 				case -5:
 					_logger.LogWarning("Bet cancellation failed: Inactive token.");
-					return StatusCode(401, new { StatusCode = 401, Message = "Inactive Token!" });
+					return StatusCode(401, new { StatusCode = 401 });
 
 				default:
 					_logger.LogError("Unexpected error occurred during bet cancellation processing.");

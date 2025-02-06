@@ -1,28 +1,29 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using OnlineCasinoAPI.Models.RequestModels;
 using OnlineCasinoAPI.Repository.IRepository;
 using System.Data;
 
 namespace OnlineCasinoAPI.Repository;
 
-public class BetRepository : IBetRepository
+public class WinRepository : IWinRepository
 {
 	private IDbConnection db;
 
-	public BetRepository(IConfiguration configuration)
+	public WinRepository(IConfiguration configuration)
 	{
 		db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
 	}
 
-	public async Task<BetResponse> RegisterBet(BetRequest request)
+	public async Task<WinResponse> RegisterWin(WinRequest request)
 	{
-		string sql = "dbo.RegisterBet";
+		string sql = "dbo.RegisterWin";
 
 		DynamicParameters parameters = new DynamicParameters();
 		parameters.Add("token", request.Token);
 		parameters.Add("amount", request.Amount);
-		parameters.Add("betTypeId", request.BetTypeId);
+		parameters.Add("winTypeId", request.WinTypeId);
 		parameters.Add("gameId", request.GameId);
 		parameters.Add("productId", request.ProductId);
 		parameters.Add("roundId", request.RoundId);
@@ -37,7 +38,7 @@ public class BetRepository : IBetRepository
 		var transactionId = parameters.Get<int?>("transactionId");
 		var currentBalance = parameters.Get<decimal?>("currentBalance");
 
-		return new BetResponse
+		return new WinResponse
 		{
 			Status = status,
 			TransactionId = transactionId,
@@ -45,19 +46,20 @@ public class BetRepository : IBetRepository
 		};
 	}
 
-	public async Task<BetResponse> CancelBet(CancelBetRequest request)
+	public async Task<WinResponse> ChangeWin(ChangeWinRequest request)
 	{
-		string sql = "dbo.CancelBet";
+		string sql = "dbo.ChangeWin";
 
 		DynamicParameters parameters = new DynamicParameters();
 		parameters.Add("token", request.Token);
 		parameters.Add("amount", request.Amount);
-		parameters.Add("betTypeId", request.BetTypeId);
+		parameters.Add("previousAmount", request.PreviousAmount);
+		parameters.Add("previousTransactionId", request.PreviousTransactionId);
+		parameters.Add("changeWinTypeId", request.ChangeWinTypeId);
 		parameters.Add("gameId", request.GameId);
 		parameters.Add("productId", request.ProductId);
 		parameters.Add("roundId", request.RoundId);
 		parameters.Add("currencyId", request.CurrencyId);
-		parameters.Add("betTransactionId", request.BetTransactionId);
 		parameters.Add("status", dbType: DbType.Int32, direction: ParameterDirection.Output);
 		parameters.Add("transactionId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 		parameters.Add("currentBalance", dbType: DbType.Decimal, direction: ParameterDirection.Output);
@@ -68,7 +70,7 @@ public class BetRepository : IBetRepository
 		var transactionId = parameters.Get<int?>("transactionId");
 		var currentBalance = parameters.Get<decimal?>("currentBalance");
 
-		return new BetResponse
+		return new WinResponse
 		{
 			Status = status,
 			TransactionId = transactionId,

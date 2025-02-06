@@ -1,11 +1,11 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
-using OnlineCasinoAPI.Models;
-using OnlineCasinoAPI.Repository.IRepository;
+using Microsoft.Extensions.Configuration;
+using OnlineCasino.Models.RepositoryModels;
+using OnlineCasino.Repository.IRepository;
 using System.Data;
 
-
-namespace OnlineCasinoAPI.Repository;
+namespace OnlineCasino.Repository;
 
 public class TokenRepository : ITokenRepository
 {
@@ -16,23 +16,24 @@ public class TokenRepository : ITokenRepository
 		db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
 	}
 
-
-	public async Task<TokenResponse> GeneratePrivateToken(string publicToken, Guid privateToken)
+	public async Task<TokenResponse> CreatePublicToken(string userId, Guid token)
 	{
-		string sql = "dbo.CreatePrivateToken";
+		string sql = "dbo.CreatePublicToken";
 
 		DynamicParameters parameters = new DynamicParameters();
 
-		parameters.Add("publicToken", publicToken);
-		parameters.Add("privateToken", privateToken);
+		parameters.Add("userId", userId);
+		parameters.Add("publicToken", token);
 		parameters.Add("status", dbType: DbType.Int32, direction: ParameterDirection.Output);
+		parameters.Add("message", dbType: DbType.String, size: 100, direction: ParameterDirection.Output);
 		parameters.Add("token", dbType: DbType.String, size: 40, direction: ParameterDirection.Output);
 
 		await db.ExecuteAsync(sql, param: parameters, commandType: CommandType.StoredProcedure);
 
 		var status = parameters.Get<int>("status");
-		var token = parameters.Get<string>("token");
+		var message = parameters.Get<string>("message");
+		var publicToken = parameters.Get<string>("token");
 
-		return new TokenResponse { Status = status, PrivateToken = token };
+		return new TokenResponse { Status = status, Message = message, PublicToken = publicToken };
 	}
 }

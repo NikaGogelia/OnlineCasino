@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using OnlineCasino.Models.RepositoryModels;
 using OnlineCasino.Repository.IRepository;
 using System.Data;
